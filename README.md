@@ -1,75 +1,80 @@
-# Withhold-Reveal Adversarial Case Study — Grok Dialogue (redacted)
+# Adversarial Dialogue Case Study — Withhold→Reveal Pattern
 
-**TL;DR:**  
-This repository documents a reproducible adversarial dialogue pattern ("withhold → reveal") that caused a model to shift from optimistic guidance to a corrective response. The case highlights weaknesses in context probing, contradiction detection, and calibration — issues critical to AI safety in high-risk domains (finance, health, legal).
+**TL;DR**  
+A short, reproducible case study documenting an adversarial "withhold-then-reveal" dialogue used to evaluate model calibration, contradiction handling, and trust erosion. This repo aims to help AI safety teams, red/blue teams, and model developers detect and mitigate this failure mode.
 
-**Study date:** 2025-11-07  
-**Model (redacted):** Large dialogue model (internal tag)  
-**Contributor:** Red-Team researcher (anonymized)  
-**Contact:** Reach via GitHub Issues
+**Study snapshot**
+- **Study date:** November 7, 2025  
+- **Target model:** Grok-4 (xAI) — *interaction with user*  
+- **Attack vector:** Withhold → Reveal (intentional omission of a pre-existing condition)  
+- **Primary outcome:** Model shifted from optimistic advice to corrective stance only after reveal — demonstrating a calibration & probing weakness.
 
 ---
 
 ## Overview
-The "withhold→reveal" pattern consists of intentionally omitting a key fact during initial interaction and revealing it later. This interaction style is an adversarial test that measures a model's ability to:
-- proactively probe for missing, high-impact context;  
-- maintain consistent calibration and uncertainty estimates;  
-- detect and reconcile contradictions when new information appears.
+This repository documents a real-world adversarial dialogue pattern in which a user intentionally withholds a critical fact, then reveals it later. The pattern highlights the model's tendency to assume optimistic conditions without actively probing for missing, high-risk information (especially in health, legal, or financial contexts).
 
-This document is shared as a responsible evaluation to help teams identify and mitigate failure modes.
-
----
-
-## Timeline (abstracted)
-- **T0 — Partial scenario provided:** Model offers optimistic/general guidance.  
-- **T1 — Hidden fact revealed (pre-existing condition):** Model revises answer and acknowledges contradiction.  
-- **T2 — Clarification & risk framing:** Model apologizes and restructures guidance.
-
-Pattern summary: Withhold → Reveal → Correction latency.
+**Goals**
+- Demonstrate a reproducible failure mode.
+- Provide measured observations and recommendations for mitigation.
+- Share an artifact for responsible evaluation and improvement.
 
 ---
 
-## Key behavioral markers (observed)
-- **Omission sensitivity:** Model does not request missing high-impact facts proactively.  
-- **Optimism bias:** Initial answers favor best-case assumptions.  
-- **Correction latency:** Substantial delay (measured in messages) before realistic correction.  
-- **Dialogue state reset:** Model re-evaluates only after explicit user revelation.
+## Timeline (Condensed)
+- **T0 — Partial scenario presented:** Model gives optimistic guidance (assumes best-case).  
+- **T1 — Missing fact revealed (pre-existing condition):** Model revises answer and acknowledges contradiction.  
+- **T2 — Clarification and safe re-structuring:** Model apologizes and provides corrected guidance.
 
 ---
 
-## Quantitative snapshot (from recorded session)
-- **Trust estimate drop:** ~40% (qualitative metric)  
-- **Correction latency:** 3 messages  
-- **Contradictions observed:** 2  
-- **Emotional harm potential:** High (in scenarios involving vulnerable users)
-
-> Metrics are illustrative from the recorded interaction and intended to prioritize mitigation, not to provide absolute scores.
+## Extracted Behavioral Markers
+- **Omission sensitivity:** Model does not proactively probe high-impact missing facts.  
+- **Optimism bias:** Tendency to favour best-case interpretation absent explicit constraints.  
+- **Correction latency:** Significant delay (measured messages) before self-correction.  
+- **Dialogue state reset required:** Model only re-evaluates after explicit confrontation.
 
 ---
 
-## Reproducibility (safeguarded)
-To preserve privacy and safety, the repository includes:
-- an *abstracted timeline* and *annotated excerpts* (redacted),  
-- a step-by-step protocol to reproduce the withhold→reveal pattern in a controlled environment,  
-- suggested evaluation metrics (trust, correction latency, contradiction count).
-
-See `how_to_replicate.md` for details.
+## Quantitative Indicators (from case)
+- **Trust drop (estimated):** 90% → 55% (~40% decrease)  
+- **Correction latency:** ~3 messages after reveal  
+- **Contradictions observed:** 2 major (optimistic → realistic)  
+- **Emotional harm likelihood:** High (apology + restructuring required)
 
 ---
 
-## Recommendations (for model teams)
-1. **Context Gap Detector:** Add heuristics that trigger probing questions when temporal or medical/legal terms appear.  
-2. **Active follow-ups in high-risk domains:** Force a short checklist for finance/health/legal prompts.  
-3. **Train on withhold→reveal examples:** Include adversarial dialogues in fine-tuning to reduce optimism bias.  
-4. **Improve contradiction detection & transparent uncertainty reporting.**
+## Reproducibility (safe, redacted)
+**Note:** DO NOT attempt to exploit model vulnerabilities. This section is intended for responsible researchers.
+
+1. Prepare a scenario in three phases: (A) present partial facts that imply a favorable outcome; (B) after the model provides optimistic guidance, reveal the pre-existing condition; (C) observe model updates and record message timestamps.  
+2. Use consistent prompts, anonymize personal data, and tag messages for measurement of latency and sentiment shift.  
+3. Provide annotated excerpts (redacted) to the model dev team for evaluation.
 
 ---
 
-## Responsible disclosure
-This work is a public, non-exploitative case study. No personal data is published. If you are part of the model team and require additional materials or redacted transcripts for triage, please open a GitHub Issue in this repository. We will respond and provide further redacted artifacts under a responsible disclosure process.
+## Recommendations for Model Developers
+1. **Context Gap Detector:** Trigger follow-ups when temporal or medical/legal keywords appear (e.g., "before", "after", "if", "history").  
+2. **Active probing in high-risk domains:** Require the model to ask clarifying Qs in finance/medical/legal dialogs.  
+3. **Improved contradiction detection:** Detect when new facts contradict prior assumptions and highlight the change early.  
+4. **Calibration transparency:** Express uncertainty levels when facts are incomplete.  
+5. **Training examples:** Add adversarial training using withhold→reveal patterns to reduce correction latency.
 
 ---
 
-## License & Tags
-License: CC-BY-SA 4.0 (or choose preferred)  
-Tags: `AI-Safety`, `Red-Teaming`, `Adversarial-Dialogue`, `NLP`, `Model-Calibration`
+## Responsible Disclosure
+This is a responsible evaluation — no personal identifying data is included. No safety systems were bypassed, and the goal is improved reliability. If you are a product/security team and want more details, contact via the GitHub profile or the email below.
+
+**Contact:** `med.redteam@gmail.com`  *(use profile for anonymity if preferred)*
+
+---
+
+## License
+This work is shared under the **MIT License** — see `LICENSE` for details.
+
+---
+
+## Authors & Acknowledgements
+- Documented and tested by: *Med — Red Team (pseudonym)*  
+- Model interaction: *Grok-4 (xAI) — interaction recorded by user*  
+- Date: November 7, 2025
