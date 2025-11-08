@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this case study, please cite it."
+title: "Withhold → Reveal Adversarial Dialogue Case Study"
+authors:
+  - family-names: "Med"
+    given-names: "Red Team"
+date-released: "2025-11-07"
+repository-code: "https://github.com/Med-865/adversarial-dialogue-case-study"
